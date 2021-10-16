@@ -196,13 +196,13 @@ export function rsp2js(rsp, options={})
   const publicFunctionStar = name => { publicFunctions.push(name); return `${FLAG_compile_to_module ? 'export ' : ''}function* ${name}`};
 
   
-  const FLAG_debug = options.debug ?? false;
+  const FLAG_debug = options.debug ? options.debug : false;
   const logDebug = FLAG_debug ? str => `console.debug(${str})` : () => ``;
 
-  const FLAG_info = options.info ?? true;
+  const FLAG_info = options.info ? options.info : true;
   const logInfo = FLAG_info ? str => `console.info(${str})` : () => ``;
 
-  const FLAG_profile = options.profile ?? false;
+  const FLAG_profile = options.profile ? options.profile : false;
   const profileVars = new DynamicVars("0");
   // const profile = FLAG_profile ? str => str : () => ``;
   const profileStart = FLAG_profile ? name => `const ${name}Start = performance.now();` : () => ``;
@@ -216,7 +216,7 @@ export function rsp2js(rsp, options={})
         `;
     } : () => ``;
 
-  const FLAG_assertions = options.assertions ?? false;
+  const FLAG_assertions = options.assertions ? options.assertions : false;
   const assert = FLAG_assertions
     ? (condition, display='"(?)"', explanation='assertion failed') => `if (!(${condition})) {throw new Error(${display} + ': ${explanation}')} ` 
     : () => ``;
@@ -1358,7 +1358,7 @@ function stratumInitialAddLogic(stratum)
       assertTrue(pred.edb);
       sb.push(`
       // adding initial ${pred} tuples
-      const added_${pred}_tuples = delta_add_${pred}_tuples(addedTuplesMap.get(${pred}) ?? []);
+      const added_${pred}_tuples = delta_add_${pred}_tuples(addedTuplesMap.get(${pred}) ? addedTuplesMap.get(${pred}) : []);
       `);  
     }      
   }
@@ -1377,7 +1377,7 @@ function stratumInitialAddLogic(stratum)
      
     for (const pred of stratum.preds)
     {
-      sb.push(`const added_${pred}_tuples = addedTuplesMap.get(${pred})?.slice(0) ?? [];`); // `slice` for copying (need to keep original facts) TODO optimize by emitting only `[]` when no fact rules exist
+      sb.push(`const added_${pred}_tuples = addedTuplesMap.get(${pred})?.slice(0) ? addedTuplesMap.get(${pred})?.slice(0) : [];`); // `slice` for copying (need to keep original facts) TODO optimize by emitting only `[]` when no fact rules exist
 
       // although this fires all rules (recursive or not), this already takes care of the non-recursive rules
       sb.push(logDebug('"adding idb tuples due to stratum-edb addition by firing all rules once"')); 
