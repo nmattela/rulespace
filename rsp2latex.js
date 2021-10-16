@@ -113,7 +113,8 @@ function termEnc(str)
   let sb = "";
   for (const c of str)
   {
-    const replace = encMap.get(c) ?? c;
+    const encMapGetC = encMap.get(c)
+    const replace = encMapGetC === null || encMapGetC === undefined ? c : encMapGetC;
       //   c === "“" || c === "”" ||
       //   c === "«" || c === "»" ||
       //   c === "…" || c === "?" ||
