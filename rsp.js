@@ -17,14 +17,15 @@ export class Program
   }
 }
 
+let counter = 0;
+
 export class Rule
 {
-  static counter = 0;
   constructor(head, body)
   {
     this.head = head;
     this.body = body;
-    this._id = Rule.counter++;
+    this._id = counter++;
   }
 
   aggregates()
