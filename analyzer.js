@@ -174,7 +174,7 @@ function collect(program)
     }
     else
     {
-      throw new Error(`cannot handle expression ${exp} of type ${exp?.constructor?.name}`);
+      throw new Error(`cannot handle expression ${exp} of type ${exp? exp.constructor ? exp.constructor.name : null : null}`);
     }
   }
 
