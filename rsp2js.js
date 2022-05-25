@@ -1265,7 +1265,7 @@ function compileApplication(app, env, termAids, rcIncs)
       }
       break;
       case "abs":
-        return `(abs ${compileExpression(rands[0], env, termAids, rcIncs)}`;
+        return `Math.abs(${compileExpression(rands[0], env, termAids, rcIncs)})`;
       case "not":
         return `!${compileExpression(rands[0], env, termAids, rcIncs)}`;
       case "even?":
