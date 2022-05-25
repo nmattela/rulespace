@@ -38,6 +38,8 @@ function freshVariable(str)
         sb += "_qm_"; break;
       case "+":
         sb += "_plus_"; break;
+      case "abs":
+        sb += "_abs_"; break;
       case "-":
         sb += "_minus_"; break;
       case "*":
@@ -100,6 +102,7 @@ class Lines
 // when used as first-class values (else, they are directly compiled)
 const nativeFuns = new Map([
   ['+', (...args) => args.reduce((acc, x) => acc + x)],
+  ['abs', arg => arg < 0 ? arg * -1 : arg],
   ['-', (...args) => args.reduce((acc, x) => acc - x)],
   ['*', (...args) => args.reduce((acc, x) => acc * x)],
   ['<', (...args) => args.slice(1).every(x => args[0] < x)],
@@ -1260,6 +1263,9 @@ function compileApplication(app, env, termAids, rcIncs)
       {
         return rands.map(exp => compileExpression(exp, env, termAids, rcIncs)).map(e => `(${e})`).join(rator.name);
       }
+      break;
+      case "abs":
+        return `(abs ${compileExpression(rands[0], env, termAids, rcIncs)}`;
       case "not":
         return `!${compileExpression(rands[0], env, termAids, rcIncs)}`;
       case "even?":
